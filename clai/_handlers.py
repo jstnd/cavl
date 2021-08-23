@@ -20,7 +20,7 @@ class RuleHandler:
         return next_generation
 
     def _validate_rule(self) -> None:
-        if 0 > self.rule > 255:
+        if self.rule < 0 or self.rule > 255:
             raise Exception("invalid rule passed")
 
     def _interpret_rule(self) -> None:
