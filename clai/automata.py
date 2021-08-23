@@ -23,7 +23,16 @@ class CellularAutomaton1D:
         self._handler = RuleHandler(rule)
 
     def next(self) -> list[int]:
-        self._board = self._handler.get_next_generation(self._board)
+        next_generation = []
+        for i in range(len(self._board)):
+            if i == len(self._board) - 1:
+                state = f"{self._board[i - 1]}{self._board[i]}{self._board[0]}"
+            else:
+                state = f"{self._board[i - 1]}{self._board[i]}{self._board[i + 1]}"
+
+            next_generation.append(self._handler.states[state])
+
+        self._board = next_generation
         return self._board
 
     def run(self, generations: int) -> list[int]:
