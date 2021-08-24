@@ -8,35 +8,37 @@ class CellularAutomaton1D:
         self._rule = rule
         self._width = width
 
+        self.generations = []
+
         if init is None:
             fill = width - 1
-            self._board = np.pad([1], (fill // 2, fill // 2 + (1 if fill % 2 == 1 else 0)))
+            self.generations.append(np.pad([1], (fill // 2, fill // 2 + (1 if fill % 2 == 1 else 0))))
         else:
             if len(init) < width:
                 fill = width - len(init)
-                self._board = np.pad(init, (fill // 2, fill // 2 + (1 if fill % 2 == 1 else 0)))
+                self.generations.append(np.pad(init, (fill // 2, fill // 2 + (1 if fill % 2 == 1 else 0))))
             elif len(init) > width:
                 raise Exception("length of given initial state bigger than given width (default width is 100)")
             else:
-                self._board = init
+                self.generations.append(init)
 
         self._handler = RuleHandler(rule)
 
     def next(self) -> list[int]:
         next_generation = []
-        for i in range(len(self._board)):
-            if i == len(self._board) - 1:
-                state = f"{self._board[i - 1]}{self._board[i]}{self._board[0]}"
+        for i in range(self._width):
+            if i == self._width - 1:
+                state = f"{self.generations[-1][i - 1]}{self.generations[-1][i]}{self.generations[-1][0]}"
             else:
-                state = f"{self._board[i - 1]}{self._board[i]}{self._board[i + 1]}"
+                state = f"{self.generations[-1][i - 1]}{self.generations[-1][i]}{self.generations[-1][i + 1]}"
 
-            next_generation.append(self._handler.states[state])
+            next_generation.append(int(self._handler.states[state]))
 
-        self._board = next_generation
-        return self._board
+        self.generations.append(next_generation)
+        return self.generations[-1]
 
     def run(self, generations: int) -> list[int]:
         for _ in range(generations):
             self.next()
 
-        return self._board
+        return self.generations[-1]
