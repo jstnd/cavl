@@ -11,8 +11,9 @@ class CellularAutomaton1D:
         self.generations = []
 
         if init is None:
-            fill = width - 1
-            self.generations.append(np.pad([1], (fill // 2, fill // 2 + (1 if fill % 2 == 1 else 0))))
+            a = np.zeros(width, dtype=int)
+            a[width // 2] = 1
+            self.generations.append(a)
         else:
             if len(init) < width:
                 fill = width - len(init)
