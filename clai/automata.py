@@ -4,12 +4,16 @@ from ._handlers import RuleHandler
 
 
 class CellularAutomaton1D:
-    def __init__(self, rule: int, init: list[int] = None, width: int = 100, num_states: int = 2):
-        if num_states < 2 or num_states > 36:
-            raise ValueError("only numbers of states between 2 and 36 are allowed")
+    def __init__(self, rule: int, init: list[int] = None, width: int = 100, radius: int = 1, num_states: int = 2):
+        if radius < 0:
+            raise ValueError("radius must be 0 or higher")
 
-        self._handler = RuleHandler(rule, num_states)
+        if num_states < 2 or num_states > 36:
+            raise ValueError("only numbers of states between 2 and 36 are supported")
+
+        self._handler = RuleHandler(rule, radius, num_states)
         self._width = width
+        self._radius = radius
         self._num_states = num_states
         self.generations = []
 
@@ -29,17 +33,11 @@ class CellularAutomaton1D:
     def next(self) -> list[int]:
         next_generation = []
         for i in range(self._width):
-            left = np.base_repr(self.generations[-1][i - 1], base=self._num_states)
-            center = np.base_repr(self.generations[-1][i], base=self._num_states)
+            state = []
+            for j in range(-self._radius, self._radius + 1):
+                state.append(np.base_repr(self.generations[-1][(i + j) % self._width], base=self._num_states))
 
-            if i == self._width - 1:
-                right = np.base_repr(self.generations[-1][0], base=self._num_states)
-            else:
-                right = np.base_repr(self.generations[-1][i + 1], base=self._num_states)
-
-            state = f"{left}{center}{right}"
-
-            next_generation.append(int(self._handler.states[state], base=self._num_states))
+            next_generation.append(int(self._handler.states["".join(state)], base=self._num_states))
 
         self.generations.append(next_generation)
         return self.generations[-1]
