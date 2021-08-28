@@ -1,49 +1,32 @@
-import numpy as np
+from typing import Any, Union
 
-from ._handlers import RuleHandler
+import numpy as np
+import numpy.typing as npt
+
+from .rules import Base1DRule
+
+
+def init(shape: Union[int, tuple[int, int]], setting: str = "simple", dtype: npt.DTypeLike = np.int, k: int = 2) -> npt.NDArray[npt.DTypeLike]:
+    if setting == "simple":
+        a = np.zeros(shape, dtype=dtype)
+
+        if isinstance(shape, int):
+            a[len(a) // 2] = k - 1
+        else:
+            a[a.shape[0] // 2][a.shape[1] // 2] = k - 1
+
+        return a
+    elif setting == "random":
+        return np.random.randint(k, size=shape, dtype=dtype)
+    else:
+        raise ValueError(f"'{setting}' is not a valid init preset name; supported names are: 'simple', 'random'")
 
 
 class CellularAutomaton1D:
-    def __init__(self, rule: int, init: list[int] = None, width: int = 100, radius: int = 1, num_states: int = 2):
-        if radius < 0:
-            raise ValueError("radius must be 0 or higher")
+    def __init__(self, rule: Base1DRule, init: Union[list[Any], npt.NDArray[Any]]):
+        self._rule = rule
+        self.generations = [init]
 
-        if num_states < 2 or num_states > 36:
-            raise ValueError("only numbers of states between 2 and 36 are supported")
-
-        self._handler = RuleHandler(rule, radius, num_states)
-        self._width = width
-        self._radius = radius
-        self._num_states = num_states
-        self.generations = []
-
-        if init is None:
-            a = np.zeros(width, dtype=int)
-            a[width // 2] = 1
-            self.generations.append(a)
-        else:
-            if len(init) < width:
-                fill = width - len(init)
-                self.generations.append(np.pad(init, (fill // 2, fill // 2 + (1 if fill % 2 == 1 else 0))))
-            elif len(init) > width:
-                raise ValueError("length of given initial state bigger than given width (default width is 100)")
-            else:
-                self.generations.append(init)
-
-    def next(self) -> list[int]:
-        next_generation = []
-        for i in range(self._width):
-            state = []
-            for j in range(-self._radius, self._radius + 1):
-                state.append(np.base_repr(self.generations[-1][(i + j) % self._width], base=self._num_states))
-
-            next_generation.append(int(self._handler.states["".join(state)], base=self._num_states))
-
-        self.generations.append(next_generation)
-        return self.generations[-1]
-
-    def run(self, generations: int) -> list[int]:
+    def generate(self, generations: int = 1) -> None:
         for _ in range(generations):
-            self.next()
-
-        return self.generations[-1]
+            self.generations.append(self._rule.apply(self.generations[-1]))
