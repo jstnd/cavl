@@ -23,12 +23,8 @@ def init(shape: Union[int, tuple[int, int]], setting: str = "simple", dtype: npt
 
 
 class CellularAutomaton1D:
-    def __init__(self, rule: Base1DRule, init: Union[list[Any], npt.NDArray[Any]], width: int = 100):
-        if len(init) != width:
-            raise ValueError("init length must be same as width value (default width is 100)")
-
+    def __init__(self, rule: Base1DRule, init: Union[list[Any], npt.NDArray[Any]]):
         self._rule = rule
-        self._width = width
         self.generations = [init]
 
     def next(self) -> list[Any]:
