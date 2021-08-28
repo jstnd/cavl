@@ -27,12 +27,6 @@ class CellularAutomaton1D:
         self._rule = rule
         self.generations = [init]
 
-    def next(self) -> list[Any]:
-        self.generations.append(self._rule.apply(self.generations[-1]))
-        return self.generations[-1]
-
-    def run(self, generations: int) -> list[Any]:
+    def generate(self, generations: int = 1) -> None:
         for _ in range(generations):
-            self.next()
-
-        return self.generations[-1]
+            self.generations.append(self._rule.apply(self.generations[-1]))
