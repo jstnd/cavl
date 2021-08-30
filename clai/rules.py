@@ -16,13 +16,13 @@ class Base1DRule(_BaseRule, ABC):
     pass
 
 
-class WolframCodeRule(Base1DRule):
+class General1DRule(Base1DRule):
     def __init__(self, rule: int, radius: int = 1, k: int = 2):
         if radius < 0:
-            raise ValueError("WolframCodeRule: radius must be 0 or higher")
+            raise ValueError(f"{self.__class__.__name__}: radius must be 0 or higher")
 
         if k < 2 or k > 36:
-            raise ValueError("WolframCodeRule: only numbers of states between 2 and 36 are supported")
+            raise ValueError(f"{self.__class__.__name__}: only numbers of states between 2 and 36 are supported")
 
         self._rule = rule
         self._radius = radius
@@ -46,11 +46,11 @@ class WolframCodeRule(Base1DRule):
 
     def _validate(self) -> None:
         if self._rule < 0:
-            raise ValueError("WolframCodeRule: rule number must not be negative")
+            raise ValueError(f"{self.__class__.__name__}: rule number must not be negative")
 
         max_rule = self._get_max_rule()
         if self._rule > max_rule:
-            raise ValueError(f"WolframCodeRule: rule number {self._rule} is greater than max rule number: {max_rule}")
+            raise ValueError(f"{self.__class__.__name__}: rule number {self._rule} is greater than max rule number: {max_rule}")
 
     def _interpret(self) -> None:
         permutations = base_permutations(self._k, 2 * self._radius + 1)
