@@ -60,3 +60,28 @@ class General1DRule(Base1DRule):
     def _get_max_rule(self) -> int:
         # see https://en.wikipedia.org/wiki/Wolfram_code
         return self._k ** (self._k ** (2 * self._radius + 1))
+
+
+class Totalistic1DRule(General1DRule):
+    def apply(self, prev_generation: list[int]) -> list[int]:
+        width = len(prev_generation)
+
+        next_generation = []
+        for i in range(width):
+            total = 0
+            for j in range(-self._radius, self._radius + 1):
+                total += prev_generation[(i + j) % width]
+
+            next_generation.append(int(self._rule_table[total]))
+
+        return next_generation
+
+    def _interpret(self) -> None:
+        max_total = (self._k - 1) * (2 * self._radius + 1)
+        totals = [*range(max_total, -1, -1)]
+        converted = np.base_repr(self._rule, base=self._k).zfill(len(totals))
+        self._rule_table = {t: d for t, d in zip(totals, converted)}
+
+    def _get_max_rule(self) -> int:
+        # see https://mathworld.wolfram.com/TotalisticCellularAutomaton.html
+        return self._k ** ((self._k - 1) * (2 * self._radius + 1) + 1)
