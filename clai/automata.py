@@ -25,8 +25,11 @@ def init(shape: Union[int, tuple[int, int]], setting: str = "simple", dtype: npt
 class CellularAutomaton1D:
     def __init__(self, rule: Base1DRule, init: Union[list[Any], npt.NDArray[Any]]):
         self.rule = rule
+        self.width = len(init)
         self.generations = [init]
+        self.num_generations = 1
 
     def generate(self, generations: int = 1) -> None:
         for _ in range(generations):
+            self.num_generations += 1
             self.generations.append(self.rule.apply(self.generations[-1]))
