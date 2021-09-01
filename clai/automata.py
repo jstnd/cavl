@@ -24,9 +24,9 @@ def init(shape: Union[int, tuple[int, int]], setting: str = "simple", dtype: npt
 
 class CellularAutomaton1D:
     def __init__(self, rule: Base1DRule, init: Union[list[Any], npt.NDArray[Any]]):
-        self._rule = rule
+        self.rule = rule
         self.generations = [init]
 
     def generate(self, generations: int = 1) -> None:
         for _ in range(generations):
-            self.generations.append(self._rule.apply(self.generations[-1]))
+            self.generations.append(self.rule.apply(self.generations[-1]))
