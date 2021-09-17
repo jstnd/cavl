@@ -33,7 +33,7 @@ class CellularAutomaton1D:
         self.apply = apply
         self.width = len(init)
 
-    def generate(self, generations: int = 1) -> None:
+    def evolve(self, generations: int = 1) -> None:
         for _ in range(generations):
             next_generation = []
             for i in range(self.width):
