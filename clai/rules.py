@@ -8,8 +8,8 @@ from ._utils import base_permutations
 
 class _BaseRule(ABC):
     @abstractmethod
-    def apply(self, prev_generation: list[Any]) -> list[Any]:
-        raise NotImplementedError()
+    def apply(self, neighbors: list[Any]) -> Any:
+        raise NotImplementedError
 
 
 class Base1DRule(_BaseRule, ABC):
@@ -31,18 +31,11 @@ class General1DRule(Base1DRule):
         self._validate()
         self._interpret()
 
-    def apply(self, prev_generation: list[int]) -> list[int]:
-        width = len(prev_generation)
+        self.neighbors = [1] * (2 * radius + 1)
 
-        next_generation = []
-        for i in range(width):
-            state = []
-            for j in range(-self._radius, self._radius + 1):
-                state.append(np.base_repr(prev_generation[(i + j) % width], base=self._k))
-
-            next_generation.append(int(self._states["".join(state)], base=self._k))
-
-        return next_generation
+    def apply(self, neighbors: list[int]) -> int:
+        state = "".join(np.base_repr(i, base=self._k) for i in neighbors)
+        return int(self._states[state], base=self._k)
 
     def _validate(self) -> None:
         if self._rule < 0:
@@ -63,18 +56,9 @@ class General1DRule(Base1DRule):
 
 
 class Totalistic1DRule(General1DRule):
-    def apply(self, prev_generation: list[int]) -> list[int]:
-        width = len(prev_generation)
-
-        next_generation = []
-        for i in range(width):
-            total = 0
-            for j in range(-self._radius, self._radius + 1):
-                total += prev_generation[(i + j) % width]
-
-            next_generation.append(int(self._rule_table[total]))
-
-        return next_generation
+    def apply(self, neighbors: list[int]) -> int:
+        total = sum(neighbors)
+        return int(self._rule_table[total], base=self._k)
 
     def _interpret(self) -> None:
         max_total = (self._k - 1) * (2 * self._radius + 1)

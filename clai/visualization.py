@@ -23,14 +23,14 @@ def animate(automaton: CellularAutomaton1D, colormap: str = 'Greys', interval: i
     fig, ax = plt.subplots()
     ax.axis('off')
 
-    grid = np.zeros((automaton.num_generations, automaton.width))
+    grid = np.zeros((len(automaton.generations), automaton.width))
 
     def _animate(frame: int):
         grid[frame] = np.array(automaton.generations[frame])
         img = ax.imshow(grid, interpolation='none', cmap=plt.get_cmap(colormap))
         return img,
 
-    anim = animation.FuncAnimation(fig, _animate, frames=automaton.num_generations, interval=interval, blit=True)
+    anim = animation.FuncAnimation(fig, _animate, frames=len(automaton.generations), interval=interval, blit=True)
     if save:
         anim.save('automaton.gif', writer='ffmpeg', dpi=dpi)
     plt.show()
