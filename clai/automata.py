@@ -49,8 +49,8 @@ class CellularAutomaton1D:
 class CellularAutomaton2D:
     def __init__(self,
                  init: Union[list[list[float]], npt.NDArray[npt.NDArray[float]]],
-                 neighbors: list[list[int]],
-                 apply: Callable[[list[list[Union[float, int]]], float], float]):
+                 neighbors: list[tuple[int, int]],
+                 apply: Callable[[dict[tuple[int, int], float], float], float]):
         self.generations = [init]
         self.neighbors = neighbors
         self.apply = apply
@@ -60,20 +60,14 @@ class CellularAutomaton2D:
     def evolve(self, generations: int = 1) -> None:
         for _ in range(generations):
             next_generation = []
-            for i in range(self.height):
+            for y in range(self.height):
                 next_row = []
-                for j in range(self.width):
-                    neighbors = []
-                    top_radius = (len(self.neighbors) - 1) // 2
-                    bottom_radius = math.ceil((len(self.neighbors) - 1) / 2)
-                    left_radius = (len(self.neighbors[0]) - 1) // 2
-                    right_radius = math.ceil((len(self.neighbors[0]) - 1) / 2)
-                    for dy, k in enumerate(range(-top_radius, bottom_radius + 1)):
-                        row_neighbors = []
-                        for dx, m in enumerate(range(-left_radius, right_radius + 1)):
-                            row_neighbors.append(self.generations[-1][(i + k) % self.height][(j + m) % self.width] if self.neighbors[dy][dx] > 0 else -1)
-                        neighbors.append(row_neighbors)
-                    next_row.append(self.apply(neighbors, self.generations[-1][i][j]))
+                for x in range(self.width):
+                    neighbors = {}
+                    for neighbor in self.neighbors:
+                        dx, dy = neighbor
+                        neighbors[neighbor] = self.generations[-1][(y + dy) % self.width][(x + dx) % self.width]
+                    next_row.append(self.apply(neighbors, self.generations[-1][y][x]))
 
                 next_generation.append(next_row)
 
