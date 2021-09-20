@@ -18,10 +18,10 @@ class General1DRule:
         self._validate()
         self._interpret()
 
-        self.neighbors = [1] * (2 * radius + 1)
+        self.neighbors = [(i, 0) for i in range(-radius, radius + 1)]
 
-    def apply(self, neighbors: list[int]) -> int:
-        state = "".join(np.base_repr(i, base=self._k) for i in neighbors)
+    def apply(self, neighbors: dict[tuple[int, int], int]) -> int:
+        state = "".join(np.base_repr(v, base=self._k) for v in neighbors.values())
         return int(self._states[state], base=self._k)
 
     def _validate(self) -> None:
@@ -43,8 +43,8 @@ class General1DRule:
 
 
 class Totalistic1DRule(General1DRule):
-    def apply(self, neighbors: list[int]) -> int:
-        total = sum(neighbors)
+    def apply(self, neighbors: dict[tuple[int, int], int]) -> int:
+        total = sum(neighbors.values())
         return int(self._rule_table[total], base=self._k)
 
     def _interpret(self) -> None:
