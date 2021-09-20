@@ -1,22 +1,9 @@
-from abc import ABC, abstractmethod
-from typing import Any
-
 import numpy as np
 
 from ._utils import base_permutations
 
 
-class _BaseRule(ABC):
-    @abstractmethod
-    def apply(self, neighbors: list[Any]) -> Any:
-        raise NotImplementedError
-
-
-class Base1DRule(_BaseRule, ABC):
-    pass
-
-
-class General1DRule(Base1DRule):
+class General1DRule:
     def __init__(self, rule: int, radius: int = 1, k: int = 2):
         if radius < 0:
             raise ValueError(f"{self.__class__.__name__}: radius must be 0 or higher")
