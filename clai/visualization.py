@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 
-from .automata import CellularAutomaton1D
+from .automata import CellularAutomaton1D, CellularAutomaton2D
 
 
 def plot(automaton: CellularAutomaton1D, offset: int = 0, colormap: str = 'Greys', save: bool = False, dpi: int = 100):
@@ -33,4 +33,14 @@ def animate(automaton: CellularAutomaton1D, colormap: str = 'Greys', interval: i
     anim = animation.FuncAnimation(fig, _animate, frames=len(automaton.generations), interval=interval, blit=True)
     if save:
         anim.save('automaton.gif', writer='ffmpeg', dpi=dpi)
+    plt.show()
+
+
+def plot2d(automaton: CellularAutomaton2D, colormap: str = 'Greys', save: bool = False, dpi: int = 100):
+    fig = plt.figure(frameon=False)
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.axis('off')
+    plt.imshow(automaton.generations[-1], interpolation='none', cmap=plt.get_cmap(colormap))
+    if save:
+        plt.savefig('automaton', dpi=dpi)
     plt.show()
