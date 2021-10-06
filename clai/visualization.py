@@ -44,3 +44,18 @@ def plot2d(automaton: CellularAutomaton2D, colormap: str = 'Greys', save: bool =
     if save:
         plt.savefig('automaton', dpi=dpi)
     plt.show()
+
+
+def animate2d(automaton: CellularAutomaton2D, colormap: str = 'Greys', interval: int = 50, save: bool = False, dpi: int = 100):
+    fig, ax = plt.subplots()
+    ax.axis('off')
+    colormap = plt.get_cmap(colormap)
+
+    def _animate(frame: int):
+        img = ax.imshow(automaton.generations[frame], interpolation='none', cmap=colormap)
+        return img,
+
+    anim = animation.FuncAnimation(fig, _animate, frames=len(automaton.generations), interval=interval, blit=True)
+    if save:
+        anim.save('automaton.gif', writer='ffmpeg', dpi=dpi)
+    plt.show()
