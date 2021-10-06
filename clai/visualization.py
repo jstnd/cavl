@@ -21,7 +21,7 @@ def plot(automaton: CellularAutomaton1D, offset: int = 0, colormap: str = 'Greys
 def animate(automaton: CellularAutomaton1D, colormap: str = 'Greys', interval: int = 50, save: bool = False, dpi: int = 100):
     # TODO: this is very basic and has issues (expand/optimize)
     
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(frameon=False)
     ax.axis('off')
 
     grid = np.zeros((len(automaton.generations), automaton.width))
@@ -50,7 +50,7 @@ def plot2d(automaton: CellularAutomaton2D, colormap: str = 'Greys', save: bool =
 
 
 def animate2d(automaton: CellularAutomaton2D, colormap: str = 'Greys', interval: int = 50, save: bool = False, dpi: int = 100):
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(frameon=False)
     ax.axis('off')
     colormap = plt.get_cmap(colormap)
 
