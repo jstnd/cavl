@@ -19,16 +19,15 @@ def plot(automaton: CellularAutomaton1D, offset: int = 0, colormap: str = 'Greys
 
 
 def animate(automaton: CellularAutomaton1D, colormap: str = 'Greys', interval: int = 50, save: bool = False, filename: str = 'automaton.gif', dpi: int = 100):
-    # TODO: this is very basic and has issues (expand/optimize)
-    
     fig, ax = plt.subplots(frameon=False)
     ax.axis('off')
+    colormap = plt.get_cmap(colormap)
 
     grid = np.zeros((len(automaton.generations), automaton.width))
 
     def _animate(frame: int):
         grid[frame] = np.array(automaton.generations[frame])
-        img = ax.imshow(grid, interpolation='none', cmap=plt.get_cmap(colormap))
+        img = ax.imshow(grid, interpolation='none', cmap=colormap)
         return img,
 
     anim = animation.FuncAnimation(fig, _animate, frames=len(automaton.generations), interval=interval, blit=True)
