@@ -14,7 +14,8 @@ def plot(automaton: CellularAutomaton1D, offset: int = 0, colormap: str = 'Greys
     plt.imshow(automaton.generations[offset:], interpolation='none', cmap=cmap)
     if save:
         plt.savefig('automaton', dpi=dpi)
-    plt.show()
+    else:
+        plt.show()
 
 
 def animate(automaton: CellularAutomaton1D, colormap: str = 'Greys', interval: int = 50, save: bool = False, dpi: int = 100):
@@ -33,7 +34,8 @@ def animate(automaton: CellularAutomaton1D, colormap: str = 'Greys', interval: i
     anim = animation.FuncAnimation(fig, _animate, frames=len(automaton.generations), interval=interval, blit=True)
     if save:
         anim.save('automaton.gif', writer='ffmpeg', dpi=dpi)
-    plt.show()
+    else:
+        plt.show()
 
 
 def plot2d(automaton: CellularAutomaton2D, colormap: str = 'Greys', save: bool = False, dpi: int = 100):
@@ -43,7 +45,8 @@ def plot2d(automaton: CellularAutomaton2D, colormap: str = 'Greys', save: bool =
     plt.imshow(automaton.generations[-1], interpolation='none', cmap=plt.get_cmap(colormap))
     if save:
         plt.savefig('automaton', dpi=dpi)
-    plt.show()
+    else:
+        plt.show()
 
 
 def animate2d(automaton: CellularAutomaton2D, colormap: str = 'Greys', interval: int = 50, save: bool = False, dpi: int = 100):
@@ -58,4 +61,5 @@ def animate2d(automaton: CellularAutomaton2D, colormap: str = 'Greys', interval:
     anim = animation.FuncAnimation(fig, _animate, frames=len(automaton.generations), interval=interval, blit=True)
     if save:
         anim.save('automaton.gif', writer='ffmpeg', dpi=dpi)
-    plt.show()
+    else:
+        plt.show()
