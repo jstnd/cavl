@@ -1,4 +1,3 @@
-import math
 from typing import Callable, Type, Union
 
 import numpy as np
@@ -25,10 +24,12 @@ def init(shape: Union[int, tuple[int, int]],
 
 
 class CellularAutomaton1D:
-    def __init__(self,
-                 init: Union[list[float], npt.NDArray[float]],
-                 neighbors: list[tuple[int, int]],
-                 apply: Callable[[dict[tuple[int, int]]], float]):
+    def __init__(
+            self,
+            init: Union[list[float], npt.NDArray[float]],
+            neighbors: list[tuple[int, int]],
+            apply: Callable[[dict[tuple[int, int]]], float]
+    ):
         self.generations = [init]
         self.neighbors = neighbors
         self.apply = apply
@@ -49,10 +50,12 @@ class CellularAutomaton1D:
 
 
 class CellularAutomaton2D:
-    def __init__(self,
-                 init: Union[list[list[float]], npt.NDArray[npt.NDArray[float]]],
-                 neighbors: list[tuple[int, int]],
-                 apply: Callable[[dict[tuple[int, int], float], float], float]):
+    def __init__(
+            self,
+            init: Union[list[list[float]], npt.NDArray[npt.NDArray[float]]],
+            neighbors: list[tuple[int, int]],
+            apply: Callable[[dict[tuple[int, int], float], float], float]
+    ):
         self.generations = [init]
         self.neighbors = neighbors
         self.apply = apply

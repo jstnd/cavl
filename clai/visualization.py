@@ -12,7 +12,14 @@ if TYPE_CHECKING:
     from matplotlib.colors import Colormap
 
 
-def plot(automaton: CellularAutomaton1D, offset: int = 0, colormap: Union[str, Colormap] = 'Greys', save: bool = False, filename: str = 'automaton', dpi: int = 100):
+def plot(
+        automaton: CellularAutomaton1D,
+        offset: int = 0,
+        colormap: Union[str, Colormap] = 'Greys',
+        save: bool = False,
+        filename: str = 'automaton',
+        dpi: int = 100
+):
     cmap = plt.get_cmap(colormap)
     fig = plt.figure(frameon=False)
     ax = fig.add_axes([0, 0, 1, 1])
@@ -24,7 +31,14 @@ def plot(automaton: CellularAutomaton1D, offset: int = 0, colormap: Union[str, C
         plt.show()
 
 
-def animate(automaton: CellularAutomaton1D, colormap: Union[str, Colormap] = 'Greys', interval: int = 50, save: bool = False, filename: str = 'automaton.gif', dpi: int = 100):
+def animate(
+        automaton: CellularAutomaton1D,
+        colormap: Union[str, Colormap] = 'Greys',
+        interval: int = 50,
+        save: bool = False,
+        filename: str = 'automaton.gif',
+        dpi: int = 100
+):
     fig, ax = plt.subplots(frameon=False)
     ax.axis('off')
     colormap = plt.get_cmap(colormap)
@@ -43,7 +57,13 @@ def animate(automaton: CellularAutomaton1D, colormap: Union[str, Colormap] = 'Gr
         plt.show()
 
 
-def plot2d(automaton: CellularAutomaton2D, colormap: Union[str, Colormap] = 'Greys', save: bool = False, filename: str = 'automaton', dpi: int = 100):
+def plot2d(
+        automaton: CellularAutomaton2D,
+        colormap: Union[str, Colormap] = 'Greys',
+        save: bool = False,
+        filename: str = 'automaton',
+        dpi: int = 100
+):
     fig = plt.figure(frameon=False)
     ax = fig.add_axes([0, 0, 1, 1])
     ax.axis('off')
@@ -54,7 +74,14 @@ def plot2d(automaton: CellularAutomaton2D, colormap: Union[str, Colormap] = 'Gre
         plt.show()
 
 
-def animate2d(automaton: CellularAutomaton2D, colormap: Union[str, Colormap] = 'Greys', interval: int = 50, save: bool = False, filename: str = 'automaton.gif', dpi: int = 100):
+def animate2d(
+        automaton: CellularAutomaton2D,
+        colormap: Union[str, Colormap] = 'Greys',
+        interval: int = 50,
+        save: bool = False,
+        filename: str = 'automaton.gif',
+        dpi: int = 100
+):
     fig, ax = plt.subplots(frameon=False)
     ax.axis('off')
     colormap = plt.get_cmap(colormap)
