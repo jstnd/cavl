@@ -1,22 +1,9 @@
-from abc import ABC, abstractmethod
-from typing import Any
-
 import numpy as np
 
 from ._utils import base_permutations
 
 
-class _BaseRule(ABC):
-    @abstractmethod
-    def apply(self, prev_generation: list[Any]) -> list[Any]:
-        raise NotImplementedError()
-
-
-class Base1DRule(_BaseRule, ABC):
-    pass
-
-
-class General1DRule(Base1DRule):
+class General1DRule:
     def __init__(self, rule: int, radius: int = 1, k: int = 2):
         if radius < 0:
             raise ValueError(f"{self.__class__.__name__}: radius must be 0 or higher")
@@ -31,18 +18,11 @@ class General1DRule(Base1DRule):
         self._validate()
         self._interpret()
 
-    def apply(self, prev_generation: list[int]) -> list[int]:
-        width = len(prev_generation)
+        self.neighbors = [(i, 0) for i in range(-radius, radius + 1)]
 
-        next_generation = []
-        for i in range(width):
-            state = []
-            for j in range(-self._radius, self._radius + 1):
-                state.append(np.base_repr(prev_generation[(i + j) % width], base=self._k))
-
-            next_generation.append(int(self._states["".join(state)], base=self._k))
-
-        return next_generation
+    def apply(self, neighbors: dict[tuple[int, int], int]) -> int:
+        state = "".join(np.base_repr(v, base=self._k) for v in neighbors.values())
+        return int(self._states[state], base=self._k)
 
     def _validate(self) -> None:
         if self._rule < 0:
@@ -63,18 +43,9 @@ class General1DRule(Base1DRule):
 
 
 class Totalistic1DRule(General1DRule):
-    def apply(self, prev_generation: list[int]) -> list[int]:
-        width = len(prev_generation)
-
-        next_generation = []
-        for i in range(width):
-            total = 0
-            for j in range(-self._radius, self._radius + 1):
-                total += prev_generation[(i + j) % width]
-
-            next_generation.append(int(self._rule_table[total]))
-
-        return next_generation
+    def apply(self, neighbors: dict[tuple[int, int], int]) -> int:
+        total = sum(neighbors.values())
+        return int(self._rule_table[total], base=self._k)
 
     def _interpret(self) -> None:
         max_total = (self._k - 1) * (2 * self._radius + 1)
