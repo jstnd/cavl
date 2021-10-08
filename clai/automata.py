@@ -37,16 +37,22 @@ class CellularAutomaton1D:
 
     def evolve(self, generations: int = 1) -> None:
         for _ in range(generations):
-            next_generation = []
-            for x in range(self.width):
-                neighbors = {}
-                for neighbor in self.neighbors:
-                    dx, dy = neighbor
-                    neighbors[neighbor] = self.generations[(-1 + dy) % len(self.generations)][(x + dx) % self.width]
+            self.generations.append(self._generation())
 
-                next_generation.append(self.apply(neighbors))
+    def _generation(self) -> list[float]:
+        next_generation = []
+        for x in range(self.width):
+            next_generation.append(self.apply(self._get_neighbors(x)))
 
-            self.generations.append(next_generation)
+        return next_generation
+
+    def _get_neighbors(self, x: int) -> dict[tuple[int, int], float]:
+        neighbors = {}
+        for neighbor in self.neighbors:
+            dx, dy = neighbor
+            neighbors[neighbor] = self.generations[(-1 + dy) % len(self.generations)][(x + dx) % self.width]
+
+        return neighbors
 
 
 class CellularAutomaton2D:
@@ -64,16 +70,22 @@ class CellularAutomaton2D:
 
     def evolve(self, generations: int = 1) -> None:
         for _ in range(generations):
-            next_generation = []
-            for y in range(self.height):
-                next_row = []
-                for x in range(self.width):
-                    neighbors = {}
-                    for neighbor in self.neighbors:
-                        dx, dy = neighbor
-                        neighbors[neighbor] = self.generations[-1][(y + dy) % self.width][(x + dx) % self.width]
-                    next_row.append(self.apply(neighbors, self.generations[-1][y][x]))
+            self.generations.append(self._generation())
 
-                next_generation.append(next_row)
+    def _generation(self) -> list[list[float]]:
+        next_generation = []
+        for y in range(self.height):
+            next_row = []
+            for x in range(self.width):
+                next_row.append(self.apply(self._get_neighbors(x, y), self.generations[-1][y][x]))
+            next_generation.append(next_row)
 
-            self.generations.append(next_generation)
+        return next_generation
+
+    def _get_neighbors(self, x: int, y: int) -> dict[tuple[int, int], float]:
+        neighbors = {}
+        for neighbor in self.neighbors:
+            dx, dy = neighbor
+            neighbors[neighbor] = self.generations[-1][(y + dy) % self.width][(x + dx) % self.width]
+
+        return neighbors
