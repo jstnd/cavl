@@ -1,6 +1,6 @@
-# clai
+# cavl
 
-**c**ellu**l**ar **a**utomata **i**nterface
+cellular automata visualization library
 
 *Library for easily creating and animating cellular automata*
 
