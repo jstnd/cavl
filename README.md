@@ -10,6 +10,8 @@ Install using `pip`:
 pip install cavl
 ```
 
+**Note: If you want to use the built-in animation functionality, you also need to install `ffmpeg`**.
+
 ## Usage
 
 `cavl` provides two main classes for creating and simulating cellular automata: `CellularAutomaton1D` and `CellularAutomaton2D`, for 1D and 2D cellular automata respectively.
