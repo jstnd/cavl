@@ -1,12 +1,11 @@
 from setuptools import setup, find_packages
-from cavl import __version__
 
 with open("README.md", "r") as f:
     long_description = f.read()
 
 setup(
-    name="calv",
-    version=__version__,
+    name="cavl",
+    version="0.4.1",
     author="Justin Doornbos",
     author_email="jstndevel@gmail.com",
     url="https://github.com/jstnd/cavl",
